@@ -26,21 +26,11 @@ class Weasel
       # Get highest scoring mutation of string
       top_s = 0
       top = ""
-
-      ##1.times do |c|
-      #  if compare(t[c-1]) > top_s
-      #    top_s = compare(t[c-1])
-      #    top = t[c-1]
-      #  end
-      #end
       
-      #@current = top
+      @current = t.sort_by { |str| compare(str) }.last
       
-
-      best = t.sort_by { |str| compare(str) }
-      # loopy loop
-      raise best.inspect
-      exit
+      print @current
+      ##exit
     end
   end
   
@@ -50,14 +40,14 @@ class Weasel
   def copy_m
     mut = []
     100.times do |c|
-      mut[c] = mutate(@goal)
+      mut[c] = mutate(@current)
     end
     mut
   end
   
   # Mutate each character of the string on a 5% (5/100) chance
   def mutate str
-    str.each_char.map{|x| rand < 0.05 ? generate_ltr(x) : x}
+    str.to_s.each_char.map{|x| rand < 0.05 ? generate_ltr(x) : x}
   end
   
   # Get rating of string against the goal
@@ -77,8 +67,14 @@ class Weasel
   
   # Generate a letter DIFFERENT to the current letter
   def generate_ltr cur
+
     a = LETTERS.sort_by{rand}
-    a[a.index(cur)+1] || a.first
+    ##a[a.index(cur)+1] || a.first
+    begin
+      a[a.index(cur)+1] || a.first
+    rescue => e
+      puts "omg it sploded on #{cur.inspect}\n error was #{e}"
+    end
   end
   
   # Generate a string of the original's length
