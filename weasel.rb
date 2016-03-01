@@ -1,7 +1,7 @@
 # Evolutionary system to acheive a string
 # `-- https://en.wikipedia.org/wiki/Weasel_program
 # SovietKetchup
-# v0.0.0
+# v1.0.0
 
 class Weasel
   LETTERS = ("A".."Z").to_a + [" "]
@@ -11,6 +11,7 @@ class Weasel
     @current = generate_str
     @mutants = []
     
+    # Start main logic
     run    
   end
   
@@ -28,8 +29,8 @@ class Weasel
       top = ""
       
       @current = t.sort_by { |str| compare(str) }.last
-      
-      print @current
+      @current.is_a?(Array) ? @current = @current.join : @current = @current
+      puts @current
       ##exit
     end
   end
@@ -39,15 +40,33 @@ class Weasel
   # Create 100 mutated copies
   def copy_m
     mut = []
-    100.times do |c|
+    # Create 100 mutations of the current string
+    10.times do |c|
       mut[c] = mutate(@current)
     end
     mut
   end
   
-  # Mutate each character of the string on a 5% (5/100) chance
+  # Mutate each character of the string on a 2.5% (5/100) chance
   def mutate str
-    str.to_s.each_char.map{|x| rand < 0.05 ? generate_ltr(x) : x}
+    # Convert to a string if it's an array
+    ##str.is_a?(Array) ? str.join : str
+    str = str.is_a?(Array) ? str.join : str
+    
+    raise str.inspect unless str.is_a?(String)
+    ##raise str.inspect if str.is_a?(Array)
+    ## raise str.inspect
+    
+    str.each_char.map{|x| rand < 0.025 ? generate_ltr(x) : x}
+    
+    ##begin
+    ##  str.join.each_char.map{|x| rand < 0.05 ? generate_ltr(x) : x}
+    ##rescue => e
+    ##  puts "problem string is #{str.inspect}"
+    ##end
+    
+    
+    
   end
   
   # Get rating of string against the goal
@@ -69,12 +88,7 @@ class Weasel
   def generate_ltr cur
 
     a = LETTERS.sort_by{rand}
-    ##a[a.index(cur)+1] || a.first
-    begin
-      a[a.index(cur)+1] || a.first
-    rescue => e
-      puts "omg it sploded on #{cur.inspect}\n error was #{e}"
-    end
+    a[a.index(cur)+1] || a.first
   end
   
   # Generate a string of the original's length
