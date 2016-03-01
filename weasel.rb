@@ -10,12 +10,8 @@ class Weasel
     @goal = goal.upcase
     @current = generate_str
     @mutants = []
-    ## run    
     
-    100.times do
-      print mutate(@goal)
-    end
-    
+    run    
   end
   
   
@@ -26,19 +22,25 @@ class Weasel
     until @current == @goal
       # Generate 100 mutated copies with each char having a 5% chance to mutate
       t = copy_m
-      exit
-      top_s = 0
-      100.times do |c|
-        if compare(t[c-1]) > top_s
-          top_s = compare(t[c-1])
-          top = t[c-1]
-        end
-      end
-      ##raise t.inspect
-      @current = t.sort_by { |str| compare(str) }
       
+      # Get highest scoring mutation of string
+      top_s = 0
+      top = ""
+
+      ##1.times do |c|
+      #  if compare(t[c-1]) > top_s
+      #    top_s = compare(t[c-1])
+      #    top = t[c-1]
+      #  end
+      #end
+      
+      #@current = top
+      
+
+      best = t.sort_by { |str| compare(str) }
       # loopy loop
-      print @current
+      raise best.inspect
+      exit
     end
   end
   
@@ -46,10 +48,11 @@ class Weasel
   
   # Create 100 mutated copies
   def copy_m
+    mut = []
     100.times do |c|
-      @mutants[c] = mutate(@current)
+      mut[c] = mutate(@goal)
     end
-    @mutants
+    mut
   end
   
   # Mutate each character of the string on a 5% (5/100) chance
@@ -59,7 +62,7 @@ class Weasel
   
   # Get rating of string against the goal
   def compare str
-    @goal.scan(/./).zip(str.each).map{|n| n[0]==n[1] ? 1 : 0}.inject{ |i,j| i+j } 
+    @goal.scan(/./).zip(str).map{|n| n[0]==n[1] ? 1 : 0}.inject{ |i,j| i+j } 
   end
   
   # Score each copy (based on similarity to the goal)
