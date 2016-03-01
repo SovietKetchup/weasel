@@ -15,10 +15,9 @@ class Weasel
     run    
   end
   
-  
-  
   # Run the logic
   def run
+    c = 0
     # Keep running until a succesful copy has been made
     until @current == @goal
       # Generate 100 mutated copies with each char having a 5% chance to mutate
@@ -27,15 +26,15 @@ class Weasel
       # Get highest scoring mutation of string
       top_s = 0
       top = ""
-      
       @current = t.sort_by { |str| compare(str) }.last
+      
+      # If it's an array, make it a string
       @current.is_a?(Array) ? @current = @current.join : @current = @current
-      puts @current
-      ##exit
+      
+      c += 1
+      puts "#{c} : #{@current}"
     end
   end
-  
-  
   
   # Create 100 mutated copies
   def copy_m
@@ -50,23 +49,8 @@ class Weasel
   # Mutate each character of the string on a 2.5% (5/100) chance
   def mutate str
     # Convert to a string if it's an array
-    ##str.is_a?(Array) ? str.join : str
     str = str.is_a?(Array) ? str.join : str
-    
-    raise str.inspect unless str.is_a?(String)
-    ##raise str.inspect if str.is_a?(Array)
-    ## raise str.inspect
-    
     str.each_char.map{|x| rand < 0.025 ? generate_ltr(x) : x}
-    
-    ##begin
-    ##  str.join.each_char.map{|x| rand < 0.05 ? generate_ltr(x) : x}
-    ##rescue => e
-    ##  puts "problem string is #{str.inspect}"
-    ##end
-    
-    
-    
   end
   
   # Get rating of string against the goal
@@ -86,7 +70,6 @@ class Weasel
   
   # Generate a letter DIFFERENT to the current letter
   def generate_ltr cur
-
     a = LETTERS.sort_by{rand}
     a[a.index(cur)+1] || a.first
   end
@@ -99,7 +82,6 @@ class Weasel
     end
     s
   end
-  
 end
 
-w = Weasel.new "METHINKS IT IS LIKE A WEASEL"
+w = Weasel.new "ME THINKS IT IS LIKE A WEASEL"
