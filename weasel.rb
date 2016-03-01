@@ -6,11 +6,42 @@
 class Weasel
   LETTERS = ("A".."Z").to_a + [" "]
   attr_reader :goal
-  def initialize :goal
-    @goal = goal.upcase
+  def initialize goal
+    @word = [ [], [] ]
+    @word[0, 0] = goal.upcase
+    @word[0, 1] = generate_str
+    run
   end
   
   private
+  # Run the logic
+  def run
+    # Keep running until a succesful copy has been made
+    until @word[0, 0] == @word[0, 1]
+      # Generate 100 mutated copies with each char having a 5% chance to mutate
+      copy(@word[0, 1])
+      rate              # Rate each one on similarity to goal
+      
+      # Take best scoring copy
+      
+      
+    end
+  end
+  
+  # Create 100 mutated copies
+  def copy
+    100.times do |c|
+      @word[1, c] = mutate(@word[0, 1])
+    end
+  end
+  
+  # Score each copy (based on similarity to the goal)
+  def rate
+    @word[1].length.times do |c|
+      score[c] = compare(@word[1, c])
+    end
+  end
+  
   # Mutate each character of the string on a 5% (5/100) chance
   def mutate str
     str = str.each_char.map{|x| rand < 0.05 ? generate_ltr(x) : x}
@@ -18,14 +49,13 @@ class Weasel
   
   # Get rating of string against the goal
   def compare str
-    @goal.each_char.to_a.zip(str.each_char.to_a).map{|n| n[0]==n[1] ? 1 : 0}.inject{ |i,j| i+j } 
-    compared.each do |x|
+    @word[0, 0].each_char.to_a.zip(str.each_char.to_a).map{|n| n[0]==n[1] ? 1 : 0}.inject{ |i,j| i+j } 
   end
   
   # Generate a string of the original's length
   def generate_str
     str = ""
-    @goal.length.times do 
+    @word[0, 0].length.times do 
       str += LETTERS.sample
     end
   end
@@ -37,7 +67,6 @@ class Weasel
       l = LETTERS.sample
     end
   end
-  
 end
 
 w = Weasel.new "METHINKS IT IS LIKE A WEASEL"
