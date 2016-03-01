@@ -1,7 +1,7 @@
 # Evolutionary system to acheive a string
 # `-- https://en.wikipedia.org/wiki/Weasel_program
 # SovietKetchup
-# v1.0.0
+# v1.0.2
 
 class Weasel
   LETTERS = ("A".."Z").to_a + [" "]
@@ -32,21 +32,22 @@ class Weasel
       @current.is_a?(Array) ? @current = @current.join : @current = @current
       
       c += 1
-      puts "#{c} : #{@current}"
+      ##puts "#{c} : #{@current}"
     end
+    puts c
   end
   
   # Create 100 mutated copies
   def copy_m
     mut = []
     # Create 100 mutations of the current string
-    10.times do |c|
+    100.times do |c|
       mut[c] = mutate(@current)
     end
     mut
   end
   
-  # Mutate each character of the string on a 2.5% (5/100) chance
+  # Mutate each character of the string on a 2.5% chance
   def mutate str
     # Convert to a string if it's an array
     str = str.is_a?(Array) ? str.join : str
