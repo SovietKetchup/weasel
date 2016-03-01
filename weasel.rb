@@ -17,14 +17,14 @@ class Weasel
   # Run the logic
   def run
     # Keep running until a succesful copy has been made
-    until @word[0, 0] == @word[0, 1]
+    until @word[0, 1] == @word[0, 0]
       # Generate 100 mutated copies with each char having a 5% chance to mutate
-      copy(@word[0, 1])
-      rate              # Rate each one on similarity to goal
+      @word = copy
       
       # Take best scoring copy
+      @word[0, 1] = @word[ 1, rate.each_with_index.max[1] ]
       
-      
+      # loopy loop
     end
   end
   
@@ -37,14 +37,15 @@ class Weasel
   
   # Score each copy (based on similarity to the goal)
   def rate
-    @word[1].length.times do |c|
-      score[c] = compare(@word[1, c])
+    score = []
+    @word[1].size.times do |c|
+      score[c] = compare (@word[1, c])
     end
   end
   
   # Mutate each character of the string on a 5% (5/100) chance
   def mutate str
-    str = str.each_char.map{|x| rand < 0.05 ? generate_ltr(x) : x}
+    str = str.to_s.each_char.map{|x| rand < 0.05 ? generate_ltr(x) : x}
   end
   
   # Get rating of string against the goal
