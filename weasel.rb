@@ -5,22 +5,25 @@
 
 class Weasel
   LETTERS = ("A".."Z").to_a + [" "]
-  attr_reader :goal
-  def initialize goal
-    @goal = goal.upcase
-    @current = generate_str
-    @mutants = []
-    
+  attr_reader :args
+  def initialize args = {}
+    args = {:goal => "METHINKS IT IS LIKE A WEASEL", :copies => 100, :chance => 2.5}.merge(args) # defaults
+
+    @goal = args[:goal].upcase
+    @copies = args[:copies]
+    @chance = args[:chance].to_f/100
     # Start main logic
-    run    
+    ##run    
   end
   
   # Run the logic
   def run
+    @current = generate_str
+    @mutants = []
     c = 0
     # Keep running until a succesful copy has been made
     until @current == @goal
-      # Generate 100 mutated copies with each char having a 5% chance to mutate
+      # Generate mutated copies with each char having a % chance to mutate
       t = copy_m
       
       # Get highest scoring mutation of string
@@ -34,14 +37,15 @@ class Weasel
       c += 1
       ##puts "#{c} : #{@current}"
     end
-    puts c
+    ##puts c
+    c
   end
   
   # Create 100 mutated copies
   def copy_m
     mut = []
     # Create 100 mutations of the current string
-    100.times do |c|
+    @copies.times do |c|
       mut[c] = mutate(@current)
     end
     mut
@@ -51,7 +55,7 @@ class Weasel
   def mutate str
     # Convert to a string if it's an array
     str = str.is_a?(Array) ? str.join : str
-    str.each_char.map{|x| rand < 0.025 ? generate_ltr(x) : x}
+    str.each_char.map{|x| rand < @chance ? generate_ltr(x) : x}
   end
   
   # Get rating of string against the goal
@@ -85,4 +89,46 @@ class Weasel
   end
 end
 
-w = Weasel.new "ME THINKS IT IS LIKE A WEASEL"
+str = "ABCDEFGHIJKLMNOPQRSTUVWXYABCDEFGHIJKLMNOPQRSTUVWXYABCDEFGHIJKLMNOPQRSTUVWXYABCDEFGHIJKLMNOPQRSTUVWXY"
+copies = 100
+chance = 2
+
+w = Weasel.new :goal => str, :copies => copies, :chance => chance
+
+## puts w.run; exit
+
+# Testing porpoises
+all = []
+
+2.times do puts "----------------------------------------" end
+
+3.times do |c|
+  all[c] = w.run
+  puts "#{c+1} : #{all[c]}" 
+end
+
+lowest = all.min
+highest = all.max
+total = all.inject(:+)
+len = all.length
+average = total.to_f / len # to_f so we don't get an integer result
+sorted = all.sort
+median = len % 2 == 1 ? sorted[len/2] : (sorted[len/2 - 1] + sorted[len/2]).to_f / 2
+
+2.times do puts "----------------------------------------" end
+
+puts "          The Weasel Program"
+puts "STRING LENGTH      : #{str.length}"
+puts "COPIES PER CYCLE   : #{copies}"
+puts "CHANCE OF MUTATION : #{chance}%"
+
+2.times do puts "----------------------------------------" end
+
+puts "AVERAGE CYCLES     : #{average}"
+puts "LOWEST CYCLE No    : #{lowest}"
+puts "HIGHEST CYCLE No   : #{highest}"
+puts "CYCLE RANGE        : #{highest-lowest}"
+puts "MEDIAN CYCLE No    : #{median}"
+
+2.times do puts "----------------------------------------" end
+
