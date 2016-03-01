@@ -7,63 +7,68 @@ class Weasel
   LETTERS = ("A".."Z").to_a + [" "]
   attr_reader :goal
   def initialize goal
-    @word = [ [], [] ]
-    @word[0][0] = goal.upcase
-    @word[0][1] = generate_str
+    @goal = goal.upcase
+    @current = generate_str
+    @mutants = []
     run
   end
   
-  private
   # Run the logic
   def run
-  
-    puts @word[0][0]
-  
     # Keep running until a succesful copy has been made
-    until @word[0][1] == @word[0][0]
+    until @current == @goal
       # Generate 100 mutated copies with each char having a 5% chance to mutate
-      copy
-      
-      # Take best scoring copy
-      @word[0][1] = @word[1][@word[1].each_with_index.max[1]]
+      t = copy
+      raise t.inspect
+      top_s = 0
+      100.times do |c|
+        if compare(t[c-1]) > top_s
+          top_s = compare(t[c-1])
+          top = t[c-1]
+        end
+      end
+      ##raise t.inspect
+      @current = t.sort_by { |str| compare(str) }
       
       # loopy loop
-      puts "#{@word[0][1]} : #{}"
+      print @current
     end
   end
   
   # Create 100 mutated copies
   def copy
     100.times do |c|
-      @word[1][c] = mutate(@word[0][1])
+      raise mutate(@current).inspect
     end
+    @mutants[1]
   end
   
   # Score each copy (based on similarity to the goal)
   def rate
-    score = []
-    @word[1].size.times do |c|
-      score[c] = compare (@word[1][c])
+    scores = []
+    @mutants.size.times do |c|
+      scores[c] = compare (@mutants[c])
       c += 1
     end
-    score
+    scores
   end
   
   # Mutate each character of the string on a 5% (5/100) chance
   def mutate str
-    str = str.to_s.each_char.map{|x| rand < 0.05 ? generate_ltr(x) : x}
+    str.to_s.each_char.map{|x| rand < 0.05 ? generate_ltr(x) : x}
   end
   
   # Get rating of string against the goal
   def compare str
-    @word[0][0].scan(/./).zip(str.each).map{|n| n[0]==n[1] ? 1 : 0}.inject{ |i,j| i+j } 
+    ##raise str.inspect
+    @goal.scan(/./).zip(str.each).map{|n| n[0]==n[1] ? 1 : 0}.inject{ |i,j| i+j } 
   end
   
   # Generate a string of the original's length
   def generate_str
     str = ""
-    @word[0][0].length.times do 
-      str +=  LETTERS.sample
+    @goal.length.times do 
+      str += LETTERS.sample
     end
     str
   end
