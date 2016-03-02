@@ -7,13 +7,14 @@ class Weasel
   LETTERS = ("A".."Z").to_a + [" "]
   attr_reader :args
   def initialize args = {}
-    args = {:goal => "METHINKS IT IS LIKE A WEASEL", :copies => 100, :chance => 2.5}.merge(args) # defaults
-
+    args = {:goal => "METHINKS IT IS LIKE A WEASEL", :copies => 100, 
+            :chance => 2.5, :test => false}.merge(args)  # defaults
+    @test = args[:test]
     @goal = args[:goal].upcase
     @copies = args[:copies]
     @chance = args[:chance].to_f/100
-    # Start main logic
-    ##run    
+    # Start main logic (if not in testing mode)
+    run unless @test  
   end
   
   # Run the logic
@@ -24,7 +25,7 @@ class Weasel
     # Keep running until a succesful copy has been made
     until @current == @goal
       # Generate mutated copies with each char having a % chance to mutate
-      t = copy_m
+      t = copy_mutate
       
       # Get highest scoring mutation of string
       top_s = 0
@@ -35,14 +36,16 @@ class Weasel
       @current.is_a?(Array) ? @current = @current.join : @current = @current
       
       c += 1
-      ##puts "#{c} : #{@current}"
+      
+      # Unless in testing mode, print each evolution of string
+      puts "#{c} : #{@current}" unless @test
     end
-    ##puts c
-    c
+    # If in testing mode, return step count
+    return c if @test
   end
   
   # Create 100 mutated copies
-  def copy_m
+  def copy_mutate
     mut = []
     # Create 100 mutations of the current string
     @copies.times do |c|
@@ -89,20 +92,26 @@ class Weasel
   end
 end
 
-str = "ABCDEFGHIJKLMNOPQRSTUVWXYABCDEFGHIJKLMNOPQRSTUVWXYABCDEFGHIJKLMNOPQRSTUVWXYABCDEFGHIJKLMNOPQRSTUVWXY"
+# Choose between testing mode or not by changing test variable
 copies = 100
 chance = 2
+test = true
 
-w = Weasel.new :goal => str, :copies => copies, :chance => chance
-
-## puts w.run; exit
+unless test
+  str = "METHINKS IT IS LIKE A WEASEL"
+  w = Weasel.new :goal => str, :copies => copies, :chance => chance, :test => test
+  exit
+else
+  str = "ABCDEFGHIJKLMNOPQRSTUVWXYABCDEFGHIJKLMNOPQRSTUVWXYABCDEFGHIJKLMNOPQRSTUVWXYABCDEFGHIJKLMNOPQRSTUVWXY"
+  w = Weasel.new :goal => str, :copies => copies, :chance => chance, :test => test
+end
 
 # Testing porpoises
 all = []
 
 2.times do puts "----------------------------------------" end
 
-3.times do |c|
+20.times do |c|
   all[c] = w.run
   puts "#{c+1} : #{all[c]}" 
 end
@@ -125,10 +134,10 @@ puts "CHANCE OF MUTATION : #{chance}%"
 2.times do puts "----------------------------------------" end
 
 puts "AVERAGE CYCLES     : #{average}"
+puts "MEDIAN CYCLE No    : #{median}"
+puts "CYCLE RANGE        : #{highest-lowest}"
 puts "LOWEST CYCLE No    : #{lowest}"
 puts "HIGHEST CYCLE No   : #{highest}"
-puts "CYCLE RANGE        : #{highest-lowest}"
-puts "MEDIAN CYCLE No    : #{median}"
 
 2.times do puts "----------------------------------------" end
 
