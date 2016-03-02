@@ -62,18 +62,8 @@ class Weasel
   end
   
   # Get rating of string against the goal
-  def compare str
-    @goal.scan(/./).zip(str).map{|n| n[0]==n[1] ? 1 : 0}.inject{ |i,j| i+j } 
-  end
-  
-  # Score each copy (based on similarity to the goal)
-  def rate
-    scores = []
-    @mutants.size.times do |c|
-      scores[c] = compare (@mutants[c])
-      c += 1
-    end
-    scores
+  def compare arr
+    @goal.scan(/./).zip(arr).map{|n| n[0]==n[1] ? 1 : 0}.inject{ |i,j| i+j } 
   end
   
   # Generate a letter DIFFERENT to the current letter
@@ -95,7 +85,7 @@ end
 # Choose between testing mode or not by changing test variable
 copies = 100
 chance = 2
-test = true
+test = false
 
 unless test
   str = "METHINKS IT IS LIKE A WEASEL"
