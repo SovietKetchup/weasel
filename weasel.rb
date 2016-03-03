@@ -1,7 +1,7 @@
 # Evolutionary system to acheive a string
 # `-- https://en.wikipedia.org/wiki/Weasel_program
 # SovietKetchup
-# v1.0.2
+# v1.1.0
 
 class Weasel
   LETTERS = ("A".."Z").to_a + [" "]
@@ -76,11 +76,10 @@ class Weasel
   end
 end
 
-# Choose between testing mode or not by changing test variable
-copies = 100
-chance = 2
-str = "METHINKS IT IS LIKE A WEASEL"
+# Create a new Weasel object with the goal string, number of copies per cycle 
+# and % chance of mutation per character
+w = Weasel.new :goal => "METHINKS IT IS LIKE A WEASEL", :copies => 100, :chance => 2
 
-w = Weasel.new :goal => str, :copies => copies, :chance => chance, :test => test
+# Returns the number of cycles taken to acheive goal string
 puts w.run
 
