@@ -8,13 +8,10 @@ class Weasel
   attr_reader :args
   def initialize args = {}
     args = {:goal => "METHINKS IT IS LIKE A WEASEL", :copies => 100, 
-            :chance => 2.5, :test => false}.merge(args)  # defaults
-    @test = args[:test]
+            :chance => 2.5}.merge(args)  # defaults
     @goal = args[:goal].upcase
     @copies = args[:copies]
     @chance = args[:chance].to_f/100
-    # Start main logic (if not in testing mode)
-    run unless @test  
   end
   
   # Run the logic
@@ -36,12 +33,9 @@ class Weasel
       @current.is_a?(Array) ? @current = @current.join : @current = @current
       
       c += 1
-      
-      # Unless in testing mode, print each evolution of string
-      puts "#{c} : #{@current}" unless @test
     end
-    # If in testing mode, return step count
-    return c if @test
+    # return step count
+    c
   end
   
   # Create 100 mutated copies
@@ -85,49 +79,8 @@ end
 # Choose between testing mode or not by changing test variable
 copies = 100
 chance = 2
-test = false
+str = "METHINKS IT IS LIKE A WEASEL"
 
-unless test
-  str = "METHINKS IT IS LIKE A WEASEL"
-  w = Weasel.new :goal => str, :copies => copies, :chance => chance, :test => test
-  exit
-else
-  str = "ABCDEFGHIJKLMNOPQRSTUVWXYABCDEFGHIJKLMNOPQRSTUVWXYABCDEFGHIJKLMNOPQRSTUVWXYABCDEFGHIJKLMNOPQRSTUVWXY"
-  w = Weasel.new :goal => str, :copies => copies, :chance => chance, :test => test
-end
-
-# Testing porpoises
-all = []
-
-2.times do puts "----------------------------------------" end
-
-20.times do |c|
-  all[c] = w.run
-  puts "#{c+1} : #{all[c]}" 
-end
-
-lowest = all.min
-highest = all.max
-total = all.inject(:+)
-len = all.length
-average = total.to_f / len # to_f so we don't get an integer result
-sorted = all.sort
-median = len % 2 == 1 ? sorted[len/2] : (sorted[len/2 - 1] + sorted[len/2]).to_f / 2
-
-2.times do puts "----------------------------------------" end
-
-puts "          The Weasel Program"
-puts "STRING LENGTH      : #{str.length}"
-puts "COPIES PER CYCLE   : #{copies}"
-puts "CHANCE OF MUTATION : #{chance}%"
-
-2.times do puts "----------------------------------------" end
-
-puts "AVERAGE CYCLES     : #{average}"
-puts "MEDIAN CYCLE No    : #{median}"
-puts "CYCLE RANGE        : #{highest-lowest}"
-puts "LOWEST CYCLE No    : #{lowest}"
-puts "HIGHEST CYCLE No   : #{highest}"
-
-2.times do puts "----------------------------------------" end
+w = Weasel.new :goal => str, :copies => copies, :chance => chance, :test => test
+puts w.run
 
