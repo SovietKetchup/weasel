@@ -17,7 +17,6 @@ class Weasel
   # Run the logic
   def run
     @current = generate_str
-    @mutants = []
     c = 0
     # Keep running until a succesful copy has been made
     until @current == @goal
