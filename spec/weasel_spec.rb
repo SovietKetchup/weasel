@@ -17,4 +17,15 @@ describe Weasel do
       @w.generate_ltr("A").length.should be 1
     end
   end
+  
+  describe "generate a string of a given length" do
+    before(:each) do
+      @w = Weasel.new
+      @w.instance_variable_set("@args", {:goal => "0123456789"})
+    end
+    
+    it "should be the length of @args[:goal]" do
+      @w.generate_str.length.should be 10
+    end
+  end
 end
