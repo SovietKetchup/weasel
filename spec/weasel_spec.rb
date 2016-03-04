@@ -10,7 +10,7 @@ describe Weasel do
       @ltr = Weasel.new.generate_ltr("A")
     end
     
-    it "should be a string" do
+    it "should be a String" do
       @ltr.should be_a String
     end
     
@@ -29,15 +29,13 @@ describe Weasel do
       @str = Weasel.new(:goal => "0123456789").generate_str
     end
     
-    it "should be a string" do
+    it "should be a String" do
       @str.should be_a String
     end
     
     it "should be the length of the goal string" do
       @str.length.should be 10
     end
-    
-
   end
   
   # compare method
@@ -47,7 +45,7 @@ describe Weasel do
       @goal = "ABCDEFGHIJ"
     end 
     
-    it "should be an integer" do
+    it "should be an Integer" do
       @w.compare(@goal, ["A","J","G","H","S","U","E","L","F","P"]).should be_a Integer
     end
     
@@ -59,4 +57,35 @@ describe Weasel do
       @w.compare(@goal, ["A","J","G","D","S","U","G","L","F","P"]).should be 3
     end
   end
+  
+  # mutate method
+  describe "generate a string similar to original ::" do
+    before(:each) do
+      @mut = Weasel.new
+    end
+    
+    it "should be an Array" do
+      @mut.mutate("0123456789", 0.05).should be_a Array
+    end
+    
+    it "should be same length as passed str" do
+      @mut.mutate("0123456789", 0.05).size.should be 10
+    end
+  end
 end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
