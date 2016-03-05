@@ -5,7 +5,7 @@ describe Weasel do
   before(:each) { @weasle = Weasel.new }
   
   # run :: compiles and sorts other methods to produce the output
-  describe "steps required to reach goal ::", :focus => false do
+  describe "steps required to reach goal ::" do
     before(:each) { @w = Weasel.new }
   
     it "should be an Integer", :focus => false do
@@ -18,7 +18,7 @@ describe Weasel do
   end
   
   # compare :: scores a string against the goal
-  describe "a score based on similarity ::", :focus => false do
+  describe "a score based on similarity ::" do
     before(:each) { @w = Weasel.new; @goal = "ABCDEFGHIJ" } 
     
     it "should be an Integer", :focus => false do
@@ -35,7 +35,7 @@ describe Weasel do
   end
   
   # copy_mutate :: creates x mutated copies of a string
-  describe "strings in an array ::", :focus => false do
+  describe "strings in an array ::" do
     before(:each) { @muts = Weasel.new.copy_mutate("ABCDEFGHIJ", 100, 0.05) }
     
     it "should be an Array", :focus => false do 
@@ -52,7 +52,7 @@ describe Weasel do
   end
 
   # generate_ltr :: generates a letter that is different to the current one
-  describe "a randomly selected letter ::", :focus => false do 
+  describe "a randomly selected letter ::" do 
     before(:each) { @ltr = Weasel.new.generate_ltr("A") }
     
     it "should be a String", :focus => false do
@@ -69,7 +69,7 @@ describe Weasel do
   end
   
   # generate_str :: generates a random string of a given length
-  describe "a random string of a given length ::", :focus => false do
+  describe "a random string of a given length ::" do
     before(:each) { @str = Weasel.new(:goal => "ABCDEFGHIJ").generate_str }
     
     it "should be a String", :focus => false do
@@ -82,7 +82,7 @@ describe Weasel do
   end
   
   # mutate :: alters each character of a string at a % chance
-  describe "generate a string similar to original ::", :focus => false do
+  describe "generate a string similar to original ::" do
     before(:each) { @w = Weasel.new }
     
     it "should be an Array", :focus => false do
