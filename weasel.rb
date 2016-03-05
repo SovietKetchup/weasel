@@ -8,7 +8,7 @@ class Weasel
   attr_reader :args
   def initialize args = {}
     @args = {:goal => "METHINKS IT IS LIKE A WEASEL", :copies => 100, 
-            :chance => 0.25}.merge(args)  # defaults
+            :chance => 0.05}.merge(args)  # defaults
     @args[:goal] = @args[:goal]
     @args[:copies] = @args[:copies]
     @args[:chance] = @args[:chance]
