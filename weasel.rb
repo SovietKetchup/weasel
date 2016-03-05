@@ -8,7 +8,7 @@ class Weasel
   attr_reader :args
   def initialize args = {}
     @args = {:goal => "METHINKS IT IS LIKE A WEASEL", :copies => 100, 
-            :chance => 2.5}.merge(args)  # defaults
+            :chance => 0.25}.merge(args)  # defaults
     @args[:goal] = @args[:goal]
     @args[:copies] = @args[:copies]
     @args[:chance] = @args[:chance]
@@ -38,7 +38,7 @@ class Weasel
     c
   end
   
-  # Create 100 mutated copies
+  # Create x(=100) mutated copies
   def copy_mutate current, copies, chance
     mut = []
     # Create 100 mutations of the current string
@@ -63,6 +63,7 @@ class Weasel
   # Generate a letter DIFFERENT to the current letter
   def generate_ltr cur
     a = LETTERS.sort_by{rand}
+    ##a[[a.index(cur)+1, a.size-1].min] || a.first
     a[a.index(cur)+1] || a.first
   end
   
@@ -75,15 +76,4 @@ class Weasel
     s
   end
 end
-
-# Create a new Weasel object with the goal string, number of copies per cycle 
-# and % chance of mutation per character
-##w = Weasel.new :goal => "METHINKS IT IS LIKE A WEASEL", :copies => 100, :chance => 0.02
-
-# Returns the number of cycles taken to acheive goal string
-##puts w.run
-
-# Change an argument to run again
-##w.args[:goal] = "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ"
-##puts w.run
 
